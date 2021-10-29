@@ -16,10 +16,11 @@ const CategoriesScreen = (props) => {
       <CategoryItem
         itemData={itemData.item}
         onSelect={() => {
+          console.log(itemData.item.id)
           props.navigation.navigate({
             routeName: 'CategoryMeals',
             params: {
-              CategoryId: itemData.item.id,
+              categoryId: itemData.item.id,
             },
           })
         }}

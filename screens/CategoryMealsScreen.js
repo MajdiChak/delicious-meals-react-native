@@ -1,16 +1,32 @@
 import React from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
+import { FlatList } from 'react-native-gesture-handler'
+import MealItem from '../components/MealItem'
 import { colors } from '../constants/colors'
-import { Categories } from '../data/data'
+import { CATEGORIES, MEALS } from '../data/dummy-data'
 
 function CategoryMealsScreen({ navigation }) {
+  const categoryId = navigation.getParam('CategoryId')
+  const displayedMeals = MEALS.filter(
+    (meal) => meal.categoryIds.indexOf(categoryId) >= 0
+  )
+  const renderMealItem = ({ item }) => {
+    return (
+      <MealItem
+        title={item.title}
+        duration={item.duration}
+        complexity={item.complexity}
+        imageUrl={item.imageUrl}
+        affordability={item.affordability}
+      />
+    )
+  }
   return (
     <View style={styles.screen}>
-      <Text>Category Meal screen id: gitgi</Text>
-
-      <Button
-        title="Detail"
-        onPress={navigation.push.bind(this, 'MealDetail')}
+      <FlatList
+        data={displayedMeals}
+        keyExtractor={(item) => item.id}
+        renderItem={renderMealItem}
       />
     </View>
   )
@@ -18,7 +34,10 @@ function CategoryMealsScreen({ navigation }) {
 
 CategoryMealsScreen.navigationOptions = (navigationData) => {
   const categoryId = navigationData.navigation.getParam('CategoryId')
-  const selectedCategory = Categories.find((cat) => cat.id === categoryId)
+  const selectedCategory = CATEGORIES.find((cat) => cat.id === categoryId)
+  {
+    console.log(categoryId)
+  }
   return {
     headerTitle: selectedCategory.title,
   }
@@ -28,7 +47,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
 })
 
